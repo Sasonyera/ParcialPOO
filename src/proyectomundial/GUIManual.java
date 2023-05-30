@@ -8,6 +8,8 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.io.File;
 import java.util.Scanner;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import javax.swing.BorderFactory;
 import javax.swing.BoxLayout;
 import javax.swing.ImageIcon;
@@ -17,6 +19,7 @@ import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.JOptionPane;
 import javax.swing.JPanel;
+import javax.swing.JPasswordField;
 import javax.swing.JScrollPane;
 import javax.swing.JTable;
 import javax.swing.JTextArea;
@@ -53,6 +56,8 @@ public class GUIManual extends JFrame {
     
     private JPanel jPanelMenuResultados;
     private JLabel btnResultados;
+     private JPanel jPanelSesion;
+    private JLabel btnSesion;
     
     private JPanel jPanelMenuDashboardSel;
     private JLabel btnDashboardSel;
@@ -68,6 +73,8 @@ public class GUIManual extends JFrame {
     private JPanel jPanelMain;
     
     private boolean haySesion;
+    private String usuario;
+    private String contra;
     
     
     public GUIManual() {
@@ -106,6 +113,9 @@ public class GUIManual extends JFrame {
         jPanelMenuResultados = new JPanel();
         btnResultados = new JLabel();
         
+         jPanelSesion=new JPanel();
+         btnSesion= new JLabel();
+        
         jPanelMenuDashboardSel = new JPanel();
         btnDashboardSel = new JLabel();
         
@@ -133,7 +143,7 @@ public class GUIManual extends JFrame {
         // Pinta y ajuste diseño del contenedor del panel izquierdo
         pintarPanelIzquierdo();
         
-        
+        pintarSesion();
         
         // Inicializa los componentes del panel derecho de los contenidos
         jPanelRight = new JPanel();
@@ -209,7 +219,43 @@ public class GUIManual extends JFrame {
         jPanelMain.repaint();
         jPanelMain.revalidate();
     }
+    private void pintarSesion(){
+         btnSesion.setText("Sesion");
+        btnSesion.setForeground(new java.awt.Color(255, 255, 255));
+        
+        JLabel vacioHome = new JLabel();
+        jPanelSesion.setBackground(new java.awt.Color(17, 41, 63));
+        jPanelSesion.setPreferredSize((new java.awt.Dimension(220, 35)));
+        jPanelSesion.setLayout(new BorderLayout(15, 0));
+        jPanelSesion.add(vacioHome, BorderLayout.WEST);
+         jPanelSesion.add(btnSesion, BorderLayout.CENTER);
+        jPanelMenu.add(jPanelSesion);
+        
+        
+        btnSesion.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                System.out.println("Sesion");
+                accionSesion();
+            }
+        });   
+    }
+    private void accionSesion(){
+       pintarMenuSesion();
+         }
+        
     
+    private void pintarMenuSesion(){
+        usuario=JOptionPane.showInputDialog("Introduce tu Usuario");
+        contra=JOptionPane.showInputDialog("Introduce tu Contraseña");
+        try {
+            haySesion=seleccionDAO.Sesion(usuario, contra);
+            System.out.println("Sesion confirmada");
+        } catch (Exception ex) {
+            System.out.println("Error GUI");
+            Logger.getLogger(GUIManual.class.getName()).log(Level.SEVERE, null, ex);
+        }
+        
+    }
     /**
      * Función que se encarga de ajustar los elementos gráficos que componente la opción de navegación de SELECCIONES
      * Define estilos, etiquetas, iconos que decoran la opción del Menú. 

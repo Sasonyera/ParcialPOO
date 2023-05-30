@@ -4,9 +4,15 @@
  */
 package proyectomundial.DAO;
 
+import java.sql.PreparedStatement;
 import java.sql.ResultSet;
+import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.logging.Level;
+import java.util.logging.Logger;
+import javax.swing.JPasswordField;
+import javax.swing.JTextField;
 import proyectomundial.model.Seleccion;
 import proyectomundial.util.BasedeDatos;
 import static proyectomundial.util.BasedeDatos.ejecutarSQL;
@@ -83,4 +89,44 @@ public class SeleccionDAO {
         
         return matrizSelecciones;
     }
+    public boolean Sesion(String usuario,String contraseña) throws Exception{
+        String sql = "SELECT * FROM poo.users WHERE username = "+usuario+" AND password = "+contraseña;
+PreparedStatement statement = null;
+ResultSet resultSet = null;
+
+try {
+   ResultSet result = BasedeDatos.ejecutarSQL(sql);
+    statement.setString(1, usuario);
+    statement.setString(2, contraseña);
+    resultSet = statement.executeQuery();
+
+    if (resultSet.next()) {
+        // Usuario y contraseña encontrados en la base de datos
+        return true;
+    }
+} catch (SQLException e) {
+    e.printStackTrace();
+} finally {
+    // Cerrar recursos
+    if (resultSet != null) {
+        try {
+            resultSet.close();
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+    }
+    if (statement != null) {
+        try {
+            statement.close();
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+    }
+}
+
+return false;
+    }
+        
+    
+        
 }
